@@ -46,7 +46,7 @@ public class ProduitDao {
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Produit> produits = null;
         try {
-            Query q = em.createQuery("SELECT p FROM Produit p");
+            Query q = em.createQuery("SELECT p FROM Produit p order by p.id");
             produits = (List<Produit>) q.getResultList();
         }
         catch(Exception e) {
