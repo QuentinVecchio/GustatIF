@@ -13,7 +13,11 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Drone extends Livreur{
-    private Double avrSpeed;
+        private Double avrSpeed;
+
+    public Drone() {
+        super();
+    }
 
     public Drone(Double avrSpeed, Double longitude, Double latitude, boolean IsFree, int poidMax, String mail) {
         super(longitude, latitude, IsFree, poidMax, mail);

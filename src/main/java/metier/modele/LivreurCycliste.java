@@ -15,6 +15,10 @@ public class LivreurCycliste extends Livreur  {
     private String nom; 
     private String prenom; 
 
+    public LivreurCycliste() {
+        super();
+    }
+
     public LivreurCycliste(String nom, String prenom, String mail, Double longitude, Double latitude, boolean IsFree, int poidMax) {
         super(longitude, latitude, IsFree, poidMax, mail);
         this.nom = nom;
