@@ -7,7 +7,9 @@ package dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import metier.modele.Livreur;
+import metier.modele.Produit;
 
 /**
  *
@@ -53,6 +55,19 @@ public class LivreurDao {
             throw e;
         }
         return toReturn;
+    }
+    
+    public List<Livreur> findAll() {
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        List<Livreur> livreurs = null;
+        try {
+            Query q = em.createQuery("SELECT l FROM Livreur l");
+            livreurs = (List<Livreur>) q.getResultList();
+        }
+        catch(Exception e) {
+            throw e;
+        }
+        return livreurs;
     }
 }
 

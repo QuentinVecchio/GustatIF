@@ -6,9 +6,6 @@
 package metier.modele;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
@@ -18,8 +15,8 @@ import javax.persistence.Id;
 public class Drone extends Livreur{
     private Double avrSpeed;
 
-    public Drone(Double avrSpeed, Double longitude, Double latitude, boolean IsFree, int poidMax) {
-        super(longitude, latitude, IsFree, poidMax);
+    public Drone(Double avrSpeed, Double longitude, Double latitude, boolean IsFree, int poidMax, String mail) {
+        super(longitude, latitude, IsFree, poidMax, mail);
         this.avrSpeed = avrSpeed;
     }
 
@@ -30,7 +27,4 @@ public class Drone extends Livreur{
     public void setAvrSpeed(Double avrSpeed) {
         this.avrSpeed = avrSpeed;
     }
-
-
-    
 }

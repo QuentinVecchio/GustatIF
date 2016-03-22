@@ -27,12 +27,14 @@ public abstract class Livreur implements Serializable{
     private Double latitude;
     private boolean IsFree;
     private int poidMax; 
-
-    public Livreur(Double longitude, Double latitude, boolean IsFree, int poidMax) {
+    private String mail; 
+    
+    public Livreur(Double longitude, Double latitude, boolean IsFree, int poidMax, String mail) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.IsFree = IsFree;
         this.poidMax = poidMax;
+        this.mail = mail;
     }
 
     public Double getLongitude() {
@@ -67,12 +69,16 @@ public abstract class Livreur implements Serializable{
         this.poidMax = poidMax;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+    
     @Override
     public String toString() {
         return "Livreur{" + "longitude=" + longitude + ", latitude=" + latitude + ", IsFree=" + IsFree + ", poidMax=" + poidMax + '}';
-    }
-    
-   
-    
-    
+    } 
 }

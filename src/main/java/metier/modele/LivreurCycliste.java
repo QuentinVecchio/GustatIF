@@ -6,10 +6,6 @@
 package metier.modele;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 /**
  *
  * @author qvecchio
@@ -18,17 +14,11 @@ import javax.persistence.Id;
 public class LivreurCycliste extends Livreur  {
     private String nom; 
     private String prenom; 
-    private String mail; 
-
-    public LivreurCycliste() {
-    
-    }
 
     public LivreurCycliste(String nom, String prenom, String mail, Double longitude, Double latitude, boolean IsFree, int poidMax) {
-        super(longitude, latitude, IsFree, poidMax);
+        super(longitude, latitude, IsFree, poidMax, mail);
         this.nom = nom;
         this.prenom = prenom;
-        this.mail = mail;
     }
 
     public String getNom() {
@@ -47,16 +37,8 @@ public class LivreurCycliste extends Livreur  {
         this.prenom = prenom;
     }
 
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     @Override
     public String toString() {
-        return "LivreurCycliste{" + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + '}';
+        return super.toString() + " && LivreurCycliste{" + ", nom=" + nom + ", prenom=" + prenom + '}';
     }
 }

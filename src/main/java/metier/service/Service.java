@@ -26,6 +26,7 @@ public class Service {
     private final RestaurantDao restaurantDao = new RestaurantDao();
     private final ProduitDao produitDao = new ProduitDao();
     private final CommandeDao commandeDao = new CommandeDao();
+    private final ServiceTechnique serviceTechnique = new ServiceTechnique();
     
     public boolean clientExist(String pseudo) {
         JpaUtil.creerEntityManager();
@@ -148,6 +149,7 @@ public class Service {
         JpaUtil.creerEntityManager();
         try {
             //Chercher un livreur
+            Livreur l = null;
             //Envoyer un mail
             JpaUtil.ouvrirTransaction();
             commandeDao.create(cmd);
