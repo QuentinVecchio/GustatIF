@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -28,14 +29,20 @@ public class Commande implements Serializable{
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateFin;
     private Map<Produit, Integer> contenues;
+    @OneToOne
     private Client client;
-    //private Livreur livreur;
+    @OneToOne
+    private Restaurant restaurant;
+    @OneToOne
+    private Livreur livreur;
     
     public Commande() {
     }
 
-    public Commande(Client client, Date dateDebut, Date dateFin, Map<Produit, Integer> contenues) {
+    public Commande(Client client, Restaurant restaurant, Livreur livreur, Date dateDebut, Date dateFin, Map<Produit, Integer> contenues) {
         this.client = client;
+        this.restaurant = restaurant;
+        this.livreur = livreur;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.contenues = contenues;
@@ -51,6 +58,22 @@ public class Commande implements Serializable{
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public Livreur getLivreur() {
+        return livreur;
+    }
+
+    public void setLivreur(Livreur livreur) {
+        this.livreur = livreur;
     }
 
     public Date getDateDebut() {
@@ -79,6 +102,25 @@ public class Commande implements Serializable{
 
     @Override
     public String toString() {
-        return "Commande{" + "id=" + id + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", contenues=" + contenues + '}';
+        if(contenues.isEmpty()) {
+            return "Commande vide";
+        } else {
+            String str = "Commande " + id + "\n";
+            Float poidT = new Float(0); 
+            Float prixT = new Float(0);
+            str += "Restaurant " + restaurant.getDenomination() + "\n";
+            str += restaurant.getAdresse() + "\n\n";//Adresse 
+            str += "A livrer chez " + client.getNom() + " " + client.getPrenom() + "\n\n";
+            str += "Contenues de la commande";
+            for(Produit p : contenues.keySet()) {
+                str += "\t" + p.getDenomination() + " : " + contenues.get(p) + "\n";
+                poidT += p.getPoids();
+                prixT += p.getPrix();
+            }
+            str += "\n\n";
+            str += "Prix totale de la commande : " + prixT + "€\n";
+            str += "Poid totale de la commande : " + poidT + "g\n";
+            return str;
+        }
     }
 }

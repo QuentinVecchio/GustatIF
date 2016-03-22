@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
 import metier.modele.Commande;
+import metier.modele.Livreur;
 import metier.modele.Produit;
 import metier.modele.Restaurant;
 
@@ -151,6 +152,7 @@ public class Service {
             //Chercher un livreur
             Livreur l = null;
             //Envoyer un mail
+            serviceTechnique.sendMail(l.getMail(), "Livraison commande " + cmd.getId(), cmd.toString());
             JpaUtil.ouvrirTransaction();
             commandeDao.create(cmd);
             JpaUtil.validerTransaction();

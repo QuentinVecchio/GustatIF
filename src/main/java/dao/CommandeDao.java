@@ -46,7 +46,7 @@ public class CommandeDao {
         return cmd;
     }
     
-    /*public Commande ValideCommande(Long id, Livreur l) throws Throwable {
+    /*public Commande ValideCommande(Long idCommande, Livreur l) throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
         Commande cmd = null;
         try {
