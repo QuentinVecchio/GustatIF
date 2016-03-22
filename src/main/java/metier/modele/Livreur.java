@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Column;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 /**
@@ -28,6 +27,9 @@ public abstract class Livreur implements Serializable{
     private boolean IsFree;
     private int poidMax; 
     private String mail; 
+
+    public Livreur() {
+    }
     
     public Livreur(Double longitude, Double latitude, boolean IsFree, int poidMax, String mail) {
         this.longitude = longitude;

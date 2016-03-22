@@ -53,6 +53,7 @@ public class RestaurantView {
        Map<Produit, Integer> contenues = new HashMap<Produit, Integer>() {};
        String cmd = null;
        do {
+            sc = new Scanner(System.in);
             System.out.println("Liste des produits du restaurant " + restaurant.getDenomination() + " : ");
             for(Produit prod : restaurant.getProduits()) {
                 System.out.println(prod.getId() + " - " + prod.getDenomination());
@@ -60,12 +61,17 @@ public class RestaurantView {
             }
             System.out.println("Choix produit (id) (f pour finaliser la commande) : ");
             cmd = sc.nextLine();
-            Produit p = service.findProduitById(Long.parseLong(cmd));
-            System.out.println(p.getId() + " - " + p.getDenomination());
-            System.out.println("\t" + p.getDescription());
-            System.out.println("Quantité : ");
-            int qt = sc.nextInt();
+            try {
+                Produit p = service.findProduitById(Long.parseLong(cmd));
+                System.out.println(p.getId() + " - " + p.getDenomination());
+                System.out.println("\t" + p.getDescription());
+                System.out.println("Quantité : ");
+                int qt = sc.nextInt();
             contenues.put(p, qt);
+            } catch (Exception e) {
+                if(cmd.equals("f") == false)
+                    System.out.println("Cet id n'est pas bon" + cmd);
+            }    
         }while(!cmd.equals("f") && !cmd.equals("q"));
        if(cmd.equals("q"))
            return null;

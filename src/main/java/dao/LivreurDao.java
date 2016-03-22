@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import metier.modele.Livreur;
-import metier.modele.Produit;
 
 /**
  *
@@ -24,7 +23,8 @@ public class LivreurDao {
         catch(Exception e) {
             throw e;
         }
-}
+    }
+    
     public Livreur update(Livreur livreur) throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
         try {
@@ -42,14 +42,14 @@ public class LivreurDao {
      * @param poidMaxCnd
      * @return
      */
-    public List<Livreur> find(boolean isFreeCnd, int poidMaxCnd ) {
+    public List<Livreur> find(boolean isFreeCnd, Float poidMaxCnd ) throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
         String conditaion = "";
-        if (isFreeCnd) conditaion+= "l.IsFree=True AND";
-        conditaion+= "l.poidMax<"+poidMaxCnd;  
+        if (isFreeCnd) conditaion+= "l.IsFree=True AND ";
+        conditaion+= "l.poidMax>="+poidMaxCnd;  
         List<Livreur> toReturn;
         try {
-            toReturn = em.createQuery("Select l from Livreur l Where"+conditaion).getResultList();
+            toReturn = em.createQuery("Select l from Livreur l Where "+conditaion).getResultList();
         }
         catch(Exception e) {
             throw e;
@@ -57,7 +57,7 @@ public class LivreurDao {
         return toReturn;
     }
     
-    public List<Livreur> findAll() {
+    public List<Livreur> findAll() throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
         List<Livreur> livreurs = null;
         try {
