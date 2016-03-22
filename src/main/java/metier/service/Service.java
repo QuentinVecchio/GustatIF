@@ -152,6 +152,7 @@ public class Service {
             //Chercher un livreur
             Livreur l = null;
             //Envoyer un mail
+            serviceTechnique.sendMail(l.getMail(), "Livraison commande " + cmd.getId(), cmd.toString());
             JpaUtil.ouvrirTransaction();
             commandeDao.create(cmd);
             JpaUtil.validerTransaction();
