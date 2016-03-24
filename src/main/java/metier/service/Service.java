@@ -12,6 +12,7 @@ import dao.LivreurCyclisteDao;
 import dao.LivreurDao;
 import dao.ProduitDao;
 import dao.RestaurantDao;
+import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,6 +79,7 @@ public class Service {
     }
      
     public Client Connection(String pseudo, String password) {
+        JpaUtil.creerEntityManager();
         try {
             return clientDao.findClientByPseudoAndPassword(pseudo, password);
         } catch (Exception e) {
@@ -162,13 +164,13 @@ public class Service {
             for(Produit p : cmd.getContenues().keySet())
                 poidT += cmd.getContenues().get(p);
             List<Livreur> list = livreurDao.find(true, poidT);
-            Livreur l = null;
+            Livreur l = serviceTechnique.findBestLivreur(list, cmd.getClient().getLatitude(), cmd.getClient().getLongitude());
             cmd.setLivreur(l);
             //Envoyer un mail
-            serviceTechnique.sendMail(l.getMail(), "Livraison commande " + cmd.getId(), cmd.toString());
             JpaUtil.ouvrirTransaction();
             commandeDao.create(cmd);
             JpaUtil.validerTransaction();
+            serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {
@@ -203,5 +205,40 @@ public class Service {
             Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
         }
         JpaUtil.fermerEntityManager();
+    }
+    
+    public Livreur findLivreurById(Long id) {
+        JpaUtil.creerEntityManager();
+        try {
+            return livreurDao.findById(id);
+        } catch (Exception e) {
+            System.out.println(e);
+        } catch (Throwable ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JpaUtil.fermerEntityManager();
+        return null;
+    }
+    
+    public Commande valideCommande(String mail, Long num) {
+        JpaUtil.creerEntityManager();
+        try {
+            JpaUtil.ouvrirTransaction();
+            Commande cmd = commandeDao.findById(num);
+            if(cmd != null) {
+                if(cmd.getLivreur().getMail().equals(mail) == false) {
+                    return null;
+                } else {
+                    cmd.setDateFin(new Date(System.currentTimeMillis()));
+                }
+            }
+            return cmd;
+        } catch (Exception e) {
+            System.out.println(e);
+        } catch (Throwable ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JpaUtil.fermerEntityManager();
+        return null;
     }
 }

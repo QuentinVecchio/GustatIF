@@ -23,7 +23,6 @@ public class ClientView {
     }
     
     public Client connection() {
-        JpaUtil.creerEntityManager();
         Client c = null;
         do {
             System.out.println("Entrez votre pseudo : ");
@@ -38,12 +37,10 @@ public class ClientView {
                 System.out.println("Ce client n'existe pas");
             }
         }while(c == null);
-        JpaUtil.fermerEntityManager();
         return c;
     }
     
     public void createAccount() {
-        JpaUtil.creerEntityManager();
         Client c = new Client();
         boolean exist;
         do {

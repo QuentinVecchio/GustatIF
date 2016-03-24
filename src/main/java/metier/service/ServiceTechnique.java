@@ -27,40 +27,43 @@ public class ServiceTechnique {
         System.out.println("Objet : " + objet);
         System.out.println(corps);
     }
-    public Livreur findeNirestLivrer (List <Livreur> livreurs , Double longitude, Double latitude){
+    public Livreur findBestLivreur (List <Livreur> livreurs , Double longitude, Double latitude){
         Double TimeMin = Double.MAX_VALUE;
         Livreur nirestLivrer = null; 
-        Double curentTime; 
-        for (Livreur curenteLivrere : livreurs){
+        Double currentTime; 
+        int i=0;
+        for (Livreur currenteLivreur : livreurs){
+
             LatLng[] step = new LatLng[0];
-            LatLng livreurPostion  = new LatLng(curenteLivrere.getLatitude(),curenteLivrere.getLatitude());
+            LatLng livreurPosition  = new LatLng(currenteLivreur.getLatitude(),currenteLivreur.getLatitude());
             
-            // livreur est un done 
-            if (Drone.class == curenteLivrere.getClass()){
-                Drone curDrone = (Drone) curenteLivrere;
-                curentTime = getFlightDistanceInKm(livreurPostion , new LatLng(latitude,longitude) )
-                        *curDrone.getAvrSpeed();
+            // livreur est un drone 
+            if (Drone.class == currenteLivreur.getClass()){
+                Drone curDrone = (Drone) currenteLivreur;
+                currentTime = getFlightDistanceInKm(livreurPosition , new LatLng(latitude,longitude) )
+                *curDrone.getAvrSpeed();
             }
             
             // livreur est un Cycliste
-            else  if (LivreurCycliste.class == curenteLivrere.getClass()){
-            curentTime = getTripDurationByBicycleInMinute(livreurPostion ,new LatLng(latitude,longitude), step );
-            
+            else  if (LivreurCycliste.class == currenteLivreur.getClass()){
+                currentTime = getTripDurationByBicycleInMinute(livreurPosition ,new LatLng(latitude,longitude), step );
+                if(currentTime == null)
+                    currentTime = Double.MAX_VALUE;
             } 
             
             //en cas d'érreurs 
             else {
-                System.out.println("érreur : ServiseTeniques.findeNirestLivrer a revoire "); //TODO sup 
-                        curentTime = Double.MAX_VALUE;
+                System.out.println("erreur : ServiseTeniques.findeNirestLivrer a revoire "); //TODO sup 
+                currentTime = Double.MAX_VALUE;
             }
             
             //recherche max Val : 
-            if (curentTime<TimeMin){
-                TimeMin = curentTime; 
-                nirestLivrer = curenteLivrere; 
+            if (currentTime<TimeMin){
+                TimeMin = currentTime; 
+                nirestLivrer = currenteLivreur;
             }
+            i++;
         }
-        
         return nirestLivrer; 
     }
 }

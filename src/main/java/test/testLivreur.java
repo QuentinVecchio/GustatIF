@@ -21,7 +21,6 @@ public class testLivreur {
         Service service = new Service();
         GeoApiContext monGeoApi = new GeoApiContext().setApiKey("AIzaSyAhf3JleYpal9S-xouJYH8lf7Dvz5Y2Nko");
         try {
-            //Drones
             GeocodingResult[] results = GeocodingApi.geocode(monGeoApi, "129 Rue Servient, 69003 Lyon").await();
             service.createDrone(new Drone(20.0, results[0].geometry.location.lat, results[0].geometry.location.lng, true, 2000, "admin_drone@gustatif.fr"));
             results = GeocodingApi.geocode(monGeoApi, "129 Rue Servient, 69003 Lyon").await();
@@ -34,8 +33,7 @@ public class testLivreur {
             service.createDrone(new Drone(20.0, results[0].geometry.location.lat, results[0].geometry.location.lng, true, 2000, "admin_drone@gustatif.fr"));
             results = GeocodingApi.geocode(monGeoApi, "129 Rue Servient, 69003 Lyon").await();
             service.createDrone(new Drone(20.0, results[0].geometry.location.lat, results[0].geometry.location.lng, true, 2000, "admin_drone@gustatif.fr"));
-            
-            //Cycliste
+ 
             results = GeocodingApi.geocode(monGeoApi, "26 Rue Louis Blanc, 69006 Lyon").await();
             service.createLivreurCycliste(new LivreurCycliste("Quentn", "Vecchio", "vecchioquentin@hotmail.fr", results[0].geometry.location.lat, results[0].geometry.location.lng, true, 6000));
             results = GeocodingApi.geocode(monGeoApi, "38 Avenue Maréchal de Saxe, 69006 Lyon").await();

@@ -36,6 +36,17 @@ public class LivreurDao {
         return livreur;
     }
 
+    public Livreur findById(Long id) throws Throwable {
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        Livreur livreur = null;
+        try {
+            livreur = em.find(Livreur.class, id);
+        }
+        catch(Exception e) {
+            throw e;
+        }
+        return livreur;
+    }
     /**
      *
      * @param isFreeCnd

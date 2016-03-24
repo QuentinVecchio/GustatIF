@@ -50,6 +50,8 @@ public class RestaurantView {
     
     public Commande chooseProduct(Client client, Restaurant restaurant) {
        Commande c = new Commande();
+       c.setClient(client);
+       c.setRestaurant(restaurant);
        Map<Produit, Integer> contenues = new HashMap<Produit, Integer>() {};
        String cmd = null;
        do {

@@ -110,8 +110,8 @@ public class Commande implements Serializable{
             Float prixT = new Float(0);
             str += "Restaurant " + restaurant.getDenomination() + "\n";
             str += restaurant.getAdresse() + "\n\n";//Adresse 
-            str += "A livrer chez " + client.getNom() + " " + client.getPrenom() + "\n\n";
-            str += "Contenues de la commande";
+            str += "A livrer chez " + client.getNom() + " " + client.getPrenom() + "\n" + client.getMail() + "\n";
+            str += "Contenues de la commande : \n";
             for(Produit p : contenues.keySet()) {
                 str += "\t" + p.getDenomination() + " : " + contenues.get(p) + "\n";
                 poidT += p.getPoids();

@@ -5,14 +5,10 @@
  */
 package vue;
 
-import dao.JpaUtil;
 import java.util.Scanner;
 import metier.modele.Client;
 import metier.service.Service;
-import com.google.maps.model.LatLng;
-import java.util.List;
 import metier.modele.Commande;
-import metier.modele.Produit;
 import metier.modele.Restaurant;
 
 /**
