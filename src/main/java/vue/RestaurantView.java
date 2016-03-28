@@ -86,7 +86,10 @@ public class RestaurantView {
        c.setDateFin(null);
        c.setContenues(contenues);
        c.setClient(client);
-       service.createCommande(c);
+       if(service.createCommande(c) == false)
+           System.out.println("Votre commande ne peut être prise en charge pour le moment.");
+       else
+           System.out.println("Votre commande est bien prise en charge.");
        return c; 
     }
     

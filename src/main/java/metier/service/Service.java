@@ -51,18 +51,27 @@ public class Service {
         return false;
     }
     
-    public void createClient(Client client) {
+    public boolean createClient(Client client) {
         JpaUtil.creerEntityManager();
         try {
             JpaUtil.ouvrirTransaction();
             clientDao.create(client);
             JpaUtil.validerTransaction();
+            String contenu = "Bonjour " + client.getPseudo();
+            contenu += "\n\nVotre compte a bien été créé";
+            contenu += "\n\nVos informations : \n" + client.getNom() + " " + client.getPrenom() + "\n";
+            contenu += client.getAdresse();
+            contenu += "\n" + client.getMail();
+            serviceTechnique.sendMail(client.getMail(),"Confirmation création du compte ", contenu);
+            JpaUtil.fermerEntityManager();
+            return true;
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {
             Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
         }
         JpaUtil.fermerEntityManager();
+        return false;
     }
     
     public Client updateClient(Client client) {
@@ -78,7 +87,7 @@ public class Service {
         return null;
     }
      
-    public Client Connection(String pseudo, String password) {
+    public Client connection(String pseudo, String password) {
         JpaUtil.creerEntityManager();
         try {
             return clientDao.findClientByPseudoAndPassword(pseudo, password);
@@ -156,7 +165,7 @@ public class Service {
         return null;
     }
     
-    public void createCommande(Commande cmd) {
+    public boolean createCommande(Commande cmd) {
         JpaUtil.creerEntityManager();
         try {
             //Chercher un livreur
@@ -165,18 +174,26 @@ public class Service {
                 poidT += cmd.getContenues().get(p);
             List<Livreur> list = livreurDao.find(true, poidT);
             Livreur l = serviceTechnique.findBestLivreur(list, cmd.getClient().getLatitude(), cmd.getClient().getLongitude());
-            cmd.setLivreur(l);
-            //Envoyer un mail
-            JpaUtil.ouvrirTransaction();
-            commandeDao.create(cmd);
-            JpaUtil.validerTransaction();
-            serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
+            if(l == null) {
+                JpaUtil.fermerEntityManager();
+                return false;
+            } else {
+                cmd.setLivreur(l);
+                //Envoyer un mail
+                JpaUtil.ouvrirTransaction();
+                commandeDao.create(cmd);
+                JpaUtil.validerTransaction();
+                serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
+                JpaUtil.fermerEntityManager();
+                return true;
+            }
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {
             Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
         }
         JpaUtil.fermerEntityManager();
+        return false;
     }
     
     public void createLivreurCycliste(LivreurCycliste livreur) {
@@ -233,6 +250,32 @@ public class Service {
                 }
             }
             return cmd;
+        } catch (Exception e) {
+            System.out.println(e);
+        } catch (Throwable ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JpaUtil.fermerEntityManager();
+        return null;
+    }
+    
+    public List<Commande> findAllCommande() {
+        JpaUtil.creerEntityManager();
+        try {
+            return commandeDao.findAll();
+        } catch (Exception e) {
+            System.out.println(e);
+        } catch (Throwable ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JpaUtil.fermerEntityManager();
+        return null;
+    }
+    
+    public List<Commande> findAllCommandeEnCours() {
+        JpaUtil.creerEntityManager();
+        try {
+            return commandeDao.findAllEnCours();
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {

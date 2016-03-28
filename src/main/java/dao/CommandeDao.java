@@ -5,8 +5,11 @@
  */
 package dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import metier.modele.Commande;
+import metier.modele.Livreur;
 
 /**
  *
@@ -46,17 +49,29 @@ public class CommandeDao {
         return cmd;
     }
     
-    /*public Commande ValideCommande(Long idCommande, Livreur l) throws Throwable {
+    public List<Commande> findAll() throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
-        Commande cmd = null;
+        List<Commande> commandes = null;
         try {
-            cmd = em.find(Commande.class, id);
-            if(cmd.getLivreur() != l)
-                return null;
+            Query q = em.createQuery("SELECT c FROM Commande c");
+            commandes = (List<Commande>) q.getResultList();
         }
         catch(Exception e) {
             throw e;
+        }     
+        return commandes;
+    }
+    
+    public List<Commande> findAllEnCours() throws Throwable {
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        List<Commande> commandes = null;
+        try {
+            Query q = em.createQuery("SELECT c FROM Commande c WHERE c.dateFin IS NULL");
+            commandes = (List<Commande>) q.getResultList();
         }
-        return cmd;
-    }*/
+        catch(Exception e) {
+            throw e;
+        }     
+        return commandes;
+    }
 }

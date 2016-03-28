@@ -41,7 +41,7 @@ public class ServiceTechnique {
             if (Drone.class == currenteLivreur.getClass()){
                 Drone curDrone = (Drone) currenteLivreur;
                 currentTime = getFlightDistanceInKm(livreurPosition , new LatLng(latitude,longitude) )
-                *curDrone.getAvrSpeed();
+                *curDrone.getVitesse();
             }
             
             // livreur est un Cycliste

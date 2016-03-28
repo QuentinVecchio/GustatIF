@@ -22,7 +22,7 @@ import metier.service.Service;
 public class testCommande {
     public static void main(String[] args) {
         Service service = new Service();
-        Client c = service.Connection("qvecchio", "qvecchio");
+        Client c = service.connection("qvecchio", "qvecchio");
         Restaurant r = service.findRestaurantById(new Long(1));
         Map<Produit, Integer> contenues = new HashMap<Produit, Integer>() {};
         System.out.println(c);

@@ -25,13 +25,13 @@ public abstract class Livreur implements Serializable{
     private Double longitude;
     private Double latitude;
     private boolean IsFree;
-    private int poidMax; 
+    private double poidMax; 
     private String mail; 
 
     public Livreur() {
     }
     
-    public Livreur(Double longitude, Double latitude, boolean IsFree, int poidMax, String mail) {
+    public Livreur(Double longitude, Double latitude, boolean IsFree, double poidMax, String mail) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.IsFree = IsFree;
@@ -55,7 +55,7 @@ public abstract class Livreur implements Serializable{
         this.latitude = latitude;
     }
 
-    public boolean isIsFree() {
+    public boolean getIsFree() {
         return IsFree;
     }
 
@@ -63,7 +63,7 @@ public abstract class Livreur implements Serializable{
         this.IsFree = IsFree;
     }
 
-    public int getPoidMax() {
+    public double getPoidMax() {
         return poidMax;
     }
 
