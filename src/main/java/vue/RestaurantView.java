@@ -81,9 +81,7 @@ public class RestaurantView {
        for(Produit p : contenues.keySet())
        {
            System.out.println("\t" + p.getDenomination() + "\t" + contenues.get(p));
-       }
-       c.setDateDebut(new Date(System.currentTimeMillis()));
-       c.setDateFin(null);
+       } 
        c.setContenues(contenues);
        c.setClient(client);
        if(service.createCommande(c) == false)

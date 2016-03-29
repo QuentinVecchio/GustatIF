@@ -177,12 +177,15 @@ public class Service {
             if(l == null) {
                 JpaUtil.fermerEntityManager();
                 return false;
-            } else {
-                cmd.setLivreur(l);
-                //Envoyer un mail
+            } else {            
                 JpaUtil.ouvrirTransaction();
+                cmd.setDateDebut(new Date(System.currentTimeMillis()));
+                cmd.setDateFin(null);
+                l.setIsFree(false);
+                cmd.setLivreur(livreurDao.update(l));
                 commandeDao.create(cmd);
                 JpaUtil.validerTransaction();
+                //Envoyer un mail
                 serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
                 JpaUtil.fermerEntityManager();
                 return true;
