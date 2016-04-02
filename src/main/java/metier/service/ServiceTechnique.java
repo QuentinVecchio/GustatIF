@@ -52,7 +52,7 @@ public class ServiceTechnique {
             
             //en cas d'érreurs 
             else {
-                System.out.println("erreur : ServiseTeniques.findeNirestLivrer a revoire "); //TODO sup 
+                System.out.println("erreur : ServiceTechnique.findBestLivreur"); //TODO sup 
                 currentTime = Double.MAX_VALUE;
             }
             

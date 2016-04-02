@@ -6,6 +6,7 @@
 package vue;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 import metier.modele.Client;
 import metier.modele.Commande;
 import metier.modele.Produit;
+import metier.modele.ProduitCommande;
 import metier.modele.Restaurant;
 import metier.service.Service;
 
@@ -52,7 +54,7 @@ public class RestaurantView {
        Commande c = new Commande();
        c.setClient(client);
        c.setRestaurant(restaurant);
-       Map<Produit, Integer> contenues = new HashMap<Produit, Integer>() {};
+       List<ProduitCommande> contenues = new ArrayList<>();
        String cmd = null;
        do {
             sc = new Scanner(System.in);
@@ -69,7 +71,7 @@ public class RestaurantView {
                 System.out.println("\t" + p.getDescription());
                 System.out.println("Quantité : ");
                 int qt = sc.nextInt();
-            contenues.put(p, qt);
+            contenues.add(new ProduitCommande(p, qt));
             } catch (Exception e) {
                 if(cmd.equals("f") == false)
                     System.out.println("Cet id n'est pas bon" + cmd);
@@ -78,9 +80,9 @@ public class RestaurantView {
        if(cmd.equals("q"))
            return null;
        System.out.println("Récapitulatif : ");
-       for(Produit p : contenues.keySet())
+       for(ProduitCommande p : contenues)
        {
-           System.out.println("\t" + p.getDenomination() + "\t" + contenues.get(p));
+           System.out.println("\t" + p.getProduit().getDenomination() + "\t" + p.getQuantite());
        } 
        c.setContenues(contenues);
        c.setClient(client);

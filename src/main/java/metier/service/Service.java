@@ -14,6 +14,7 @@ import dao.ProduitDao;
 import dao.RestaurantDao;
 import java.sql.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metier.modele.Client;
@@ -22,6 +23,7 @@ import metier.modele.Drone;
 import metier.modele.Livreur;
 import metier.modele.LivreurCycliste;
 import metier.modele.Produit;
+import metier.modele.ProduitCommande;
 import metier.modele.Restaurant;
 
 /**
@@ -170,25 +172,29 @@ public class Service {
         try {
             //Chercher un livreur
             Float poidT = new Float(0);
-            for(Produit p : cmd.getContenues().keySet())
-                poidT += cmd.getContenues().get(p);
+            for(ProduitCommande p : cmd.getContenues())
+                poidT += p.getQuantite();
             List<Livreur> list = livreurDao.find(true, poidT);
-            Livreur l = serviceTechnique.findBestLivreur(list, cmd.getClient().getLatitude(), cmd.getClient().getLongitude());
-            if(l == null) {
-                JpaUtil.fermerEntityManager();
-                return false;
-            } else {            
-                JpaUtil.ouvrirTransaction();
-                cmd.setDateDebut(new Date(System.currentTimeMillis()));
-                cmd.setDateFin(null);
-                l.setIsFree(false);
-                cmd.setLivreur(livreurDao.update(l));
-                commandeDao.create(cmd);
-                JpaUtil.validerTransaction();
-                //Envoyer un mail
-                serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
-                JpaUtil.fermerEntityManager();
-                return true;
+            if(list.size() > 0) {
+                Livreur l = serviceTechnique.findBestLivreur(list, cmd.getClient().getLatitude(), cmd.getClient().getLongitude());
+                if(l == null) {
+                    JpaUtil.fermerEntityManager();
+                    return false;
+                } else {            
+                    JpaUtil.ouvrirTransaction();
+                    cmd.setDateDebut(new Date(System.currentTimeMillis()));
+                    cmd.setDateFin(null);
+                    l.setIsFree(false);
+                    cmd.setLivreur(livreurDao.update(l));
+                    //Scanner s = new Scanner(System.in);
+                    //s.nextLine();
+                    commandeDao.create(cmd);
+                    JpaUtil.validerTransaction();
+                    //Envoyer un mail
+                    serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
+                    JpaUtil.fermerEntityManager();
+                    return true;
+                }
             }
         } catch (Exception e) {
             System.out.println(e);

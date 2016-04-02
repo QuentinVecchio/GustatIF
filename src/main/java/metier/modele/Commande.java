@@ -7,11 +7,12 @@ package metier.modele;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.Version;
@@ -29,24 +30,34 @@ public class Commande implements Serializable{
     private Date dateDebut;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateFin;
-    private Map<Produit, Integer> contenues;
+    @OneToOne
+    private List<ProduitCommande> contenues;
     @OneToOne
     private Client client;
     @OneToOne
     private Restaurant restaurant;
     @OneToOne
-    @Version
+   
     private Livreur livreur;
     
     public Commande() {
     }
 
-    public Commande(Client client, Restaurant restaurant, Livreur livreur, Date dateDebut, Date dateFin, Map<Produit, Integer> contenues) {
+    public Commande(Client client, Restaurant restaurant, Livreur livreur, Date dateDebut, Date dateFin, List<ProduitCommande> contenues) {
         this.client = client;
         this.restaurant = restaurant;
         this.livreur = livreur;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
+        this.contenues = contenues;
+    }
+    
+    public Commande(Client client, Restaurant restaurant, List<ProduitCommande> contenues) {
+        this.client = client;
+        this.restaurant = restaurant;
+        this.livreur = null;
+        this.dateDebut = null;
+        this.dateFin = null;
         this.contenues = contenues;
     }
 
@@ -94,11 +105,11 @@ public class Commande implements Serializable{
         this.dateFin = dateFin;
     }
 
-    public Map<Produit, Integer> getContenues() {
+    public List<ProduitCommande> getContenues() {
         return contenues;
     }
 
-    public void setContenues(Map<Produit, Integer> contenues) {
+    public void setContenues(List<ProduitCommande> contenues) {
         this.contenues = contenues;
     }
 
@@ -114,14 +125,14 @@ public class Commande implements Serializable{
             str += restaurant.getAdresse() + "\n\n";//Adresse 
             str += "A livrer chez " + client.getNom() + " " + client.getPrenom() + "\n" + client.getMail() + "\n";
             str += "Contenues de la commande : \n";
-            for(Produit p : contenues.keySet()) {
-                str += "\t" + p.getDenomination() + " : " + contenues.get(p) + "\n";
-                poidT += p.getPoids();
-                prixT += p.getPrix();
+            for(ProduitCommande p : contenues) {
+                str += "\t" + p.getProduit().getDenomination() + " : " + p.getQuantite() + "\n";
+                poidT += p.getProduit().getPoids();
+                prixT += p.getProduit().getPrix();
             }
             str += "\n\n";
             str += "Prix totale de la commande : " + prixT + "€\n";
-            str += "Poid totale de la commande : " + poidT + "g\n";
+            str += "Poids totale de la commande : " + poidT + "g\n";
             return str;
         }
     }

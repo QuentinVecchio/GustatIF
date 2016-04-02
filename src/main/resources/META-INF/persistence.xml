@@ -9,6 +9,7 @@
     <class>metier.modele.Drone</class>
     <class>metier.modele.LivreurCycliste</class>
     <class>metier.modele.Livreur</class>
+    <class>metier.modele.ProduitCommande</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/GustatIF"/>
       <property name="javax.persistence.jdbc.password" value="qvecchio"/>

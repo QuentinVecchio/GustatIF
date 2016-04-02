@@ -46,7 +46,6 @@ public class ClientView {
         do {
             System.out.println("Entrez votre pseudo : ");
             c.setPseudo(sc.nextLine());
-            System.out.println("ok");
             exist = service.clientExist(c.getPseudo());
             if(exist) {
                 System.out.println("Le pseudo existe déjà");
