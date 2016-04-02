@@ -167,6 +167,19 @@ public class Service {
         return null;
     }
     
+    public List<Livreur> findAllLivreur() {
+        JpaUtil.creerEntityManager();
+        try {
+            return livreurDao.findAll();
+        } catch (Exception e) {
+            System.out.println(e);
+        } catch (Throwable ex) {
+            Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JpaUtil.fermerEntityManager();
+        return null;
+    }
+    
     public boolean createCommande(Commande cmd) {
         JpaUtil.creerEntityManager();
         try {
@@ -182,16 +195,27 @@ public class Service {
                     return false;
                 } else {            
                     JpaUtil.ouvrirTransaction();
+                    Livreur l2 = livreurDao.findById(l.getId());
+                    if(l2.getIsFree())
+                    {
+                        l2.setIsFree(false);
+                        cmd.setLivreur(livreurDao.update(l2));
+                        JpaUtil.validerTransaction();
+                    } else {
+                        JpaUtil.annulerTransaction();
+                        JpaUtil.fermerEntityManager();
+                        return false;
+                    }
+                    JpaUtil.ouvrirTransaction();
+                    System.out.println("Attente ...");
                     cmd.setDateDebut(new Date(System.currentTimeMillis()));
                     cmd.setDateFin(null);
-                    l.setIsFree(false);
-                    cmd.setLivreur(livreurDao.update(l));
-                    //Scanner s = new Scanner(System.in);
-                    //s.nextLine();
+                    Scanner s = new Scanner(System.in);
+                    s.nextLine();
                     commandeDao.create(cmd);
                     JpaUtil.validerTransaction();
                     //Envoyer un mail
-                    serviceTechnique.sendMail(l.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
+                    serviceTechnique.sendMail(l2.getMail(),"Livraison commande " + cmd.getId(), cmd.toString());
                     JpaUtil.fermerEntityManager();
                     return true;
                 }
@@ -236,7 +260,9 @@ public class Service {
     public Livreur findLivreurById(Long id) {
         JpaUtil.creerEntityManager();
         try {
-            return livreurDao.findById(id);
+            Livreur l = livreurDao.findById(id);
+            JpaUtil.fermerEntityManager();
+            return l;
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {
@@ -255,9 +281,10 @@ public class Service {
                 if(cmd.getLivreur().getMail().equals(mail) == false) {
                     return null;
                 } else {
-                    cmd.setDateFin(new Date(System.currentTimeMillis()));
+                    cmd = commandeDao.valideCommande(cmd);
                 }
             }
+            JpaUtil.fermerEntityManager();
             return cmd;
         } catch (Exception e) {
             System.out.println(e);
@@ -271,7 +298,9 @@ public class Service {
     public List<Commande> findAllCommande() {
         JpaUtil.creerEntityManager();
         try {
-            return commandeDao.findAll();
+            List<Commande> cmds = commandeDao.findAll();
+            JpaUtil.fermerEntityManager();
+            return cmds;
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {
@@ -284,7 +313,9 @@ public class Service {
     public List<Commande> findAllCommandeEnCours() {
         JpaUtil.creerEntityManager();
         try {
-            return commandeDao.findAllEnCours();
+            List<Commande> cmds = commandeDao.findAllEnCours();
+            JpaUtil.fermerEntityManager();
+            return cmds;
         } catch (Exception e) {
             System.out.println(e);
         } catch (Throwable ex) {

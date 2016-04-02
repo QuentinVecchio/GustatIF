@@ -39,6 +39,10 @@ public abstract class Livreur implements Serializable{
         this.mail = mail;
     }
 
+    public Long getId() {
+        return id;
+    }
+    
     public Double getLongitude() {
         return longitude;
     }

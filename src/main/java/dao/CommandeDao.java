@@ -5,11 +5,13 @@
  */
 package dao;
 
+import java.sql.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import metier.modele.Commande;
 import metier.modele.Livreur;
+import metier.modele.ProduitCommande;
 
 /**
  *
@@ -19,6 +21,9 @@ public class CommandeDao {
     public void create(Commande cmd) throws Throwable {
         EntityManager em = JpaUtil.obtenirEntityManager();
         try {
+            for(ProduitCommande c : cmd.getContenues()) {
+                em.persist(c);
+            }
             em.persist(cmd);
         }
         catch(Exception e) {
@@ -73,5 +78,15 @@ public class CommandeDao {
             throw e;
         }     
         return commandes;
+    }
+    
+    public Commande valideCommande(Commande cmd) throws Throwable {
+        EntityManager em = JpaUtil.obtenirEntityManager();
+        cmd.setDateFin(new Date(System.currentTimeMillis()));
+        cmd.getLivreur().setIsFree(true);
+        JpaUtil.ouvrirTransaction();
+        Commande c = update(cmd);
+        JpaUtil.validerTransaction();
+        return c;
     }
 }

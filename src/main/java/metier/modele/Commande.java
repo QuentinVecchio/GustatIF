@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.Version;
@@ -30,14 +30,13 @@ public class Commande implements Serializable{
     private Date dateDebut;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateFin;
-    @OneToOne
+    @ManyToMany
     private List<ProduitCommande> contenues;
     @OneToOne
     private Client client;
     @OneToOne
     private Restaurant restaurant;
     @OneToOne
-   
     private Livreur livreur;
     
     public Commande() {
@@ -119,6 +118,7 @@ public class Commande implements Serializable{
             return "Commande vide";
         } else {
             String str = "Commande " + id + "\n";
+            str += "Livré par livreur n°" + livreur.getId() + "\n";
             Float poidT = new Float(0); 
             Float prixT = new Float(0);
             str += "Restaurant " + restaurant.getDenomination() + "\n";

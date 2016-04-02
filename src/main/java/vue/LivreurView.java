@@ -22,6 +22,7 @@ public class LivreurView {
             String mail = sc.nextLine();
             System.out.println("Numéro de commande : ");
             Long numCmd = sc.nextLong();
+            sc.nextLine();
             Commande cmd = service.valideCommande(mail, numCmd);
             if(cmd != null) {
                 System.out.println("Commande " + cmd.getId() + " validée à " + cmd.getDateFin());

@@ -111,7 +111,7 @@ public class Client implements Serializable{
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
-        GeoApiContext monGeoApi = new GeoApiContext().setApiKey("AIzaSyAhf3JleYpal9S-xouJYH8lf7Dvz5Y2Nko");
+        GeoApiContext monGeoApi = new GeoApiContext().setApiKey("AIzaSyDcVVJjfmxsNdbdUYeg9MjQoJJ6THPuap4");
         try {
             GeocodingResult[] results = GeocodingApi.geocode(monGeoApi, adresse).await();
             this.latitude = results[0].geometry.location.lat;
